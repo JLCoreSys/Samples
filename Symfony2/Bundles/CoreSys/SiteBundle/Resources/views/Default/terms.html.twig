@@ -1,0 +1,33 @@
+{% extends '::base.html.twig' %}
+
+{% block site_title %}{{ parent() }}-Main{% endblock site_title %}
+{% block head_meta_description %}{{ parent() }}{% endblock head_meta_description %}
+{% block head_meta_keywords %}{{ parent() }}{% endblock head_meta_keywords %}
+{% block head_meta_author %}{{ parent() }}{% endblock head_meta_author %}
+
+{% block head_css %}
+    {{ parent() }}
+{% endblock head_css %}
+
+{% block head_js %}
+    {{ parent() }}
+{% endblock head_js %}
+
+{% block content %}
+    <div class="with-padding">
+        <h1>Terms of Service</h1>
+
+        <div class="with-padding">
+            {{ config.termsOfUse | raw }}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block body_js %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('body').css('background-size', '0 0');
+        });
+    </script>
+{% endblock body_js %}

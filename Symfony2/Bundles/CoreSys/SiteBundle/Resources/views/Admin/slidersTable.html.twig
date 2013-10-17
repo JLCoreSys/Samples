@@ -1,0 +1,55 @@
+<table class="table sortable no-margin" cellspacing="0" width="100%" id="sliders-table">
+
+    <thead>
+    <tr>
+        <th class="black-cell check-all normal"><span class="loading" title="Loading Table Data, please wait"></span>
+        </th>
+        <th scope="col" class="optional">
+        <span class="column-sort">
+        <a href="#" title="Sort up" class="sort-up"></a>
+        <a href="#" title="Sort down" class="sort-down"></a>
+        </span> ID
+        </th>
+        <th scope="col" class="essential persist">
+        <span class="column-sort">
+        <a href="#" title="Sort up" class="sort-up"></a>
+        <a href="#" title="Sort down" class="sort-down"></a>
+        </span> Image
+        </th>
+        <th scope="col" class="optional">
+        <span class="column-sort">
+        <a href="#" title="Sort up" class="sort-up"></a>
+        <a href="#" title="Sort down" class="sort-down"></a>
+        </span> Position
+        </th>
+        <th scope="col" class="essential">
+            <span class="column-sort">
+                <a href="#" title="Sort up" class="sort-up"></a>
+                <a href="#" title="Sort down" class="sort-down"></a>
+            </span> Active
+        </th>
+        <th scope="col" class="table-actions minimal">Actions</th>
+    </tr>
+    </thead>
+
+    <tbody style="height:auto">
+    {% for i,slider in sliders %}
+        <tr data-sid="{{ slider.id }}" id="slider-row-{{ slider.id }}">
+            <td scope="row" class="table-check-cell align-center">
+                <input type="checkbox" name="selected[]" id="table-selected-1" value="{{ slider.id }}"></td>
+            <td class="align-center">{{ slider.id }}</td>
+            <td>
+                <img src="{{ app.request.getSchemeAndHttpHost ~ asset( slider.image.getUrl( 'sliders', 'tiny', true )) }}" style="max-height:50px"/>
+            </td>
+            <td class="align-center">{{ slider.position }}</td>
+            <td class="align-center">{{ slider.active ? fugue( 'tick-circle' ) : fugue( 'cross-circle' ) }}</td>
+            <td class="table-actions align-center">
+                <a href="javascript:previewSlider({{ slider.id }});" title="Preview" class="with-tip">{{ fugue( 'magnifier' ) }}</a>
+                <a href="javascript:editSlider({{ slider.id }});" title="Edit" class="with-tip">{{ fugue( 'pencil' ) }}</a>
+                <a href="javascript:removeSingle({{ slider.id }});" title="Delete" class="with-tip">{{ fugue( 'cross-circle' ) }}</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>

@@ -1,0 +1,83 @@
+{{ nivoCss() }}
+<div class="with-padding">
+    <div style="float:left;width:160px;margin-right:2px;">
+        <div style="line-height: 10px;background:none;">
+            <div style="max-width:160px; width: 160px; background:none;">
+                <object style="margin:0;padding:0;" type="application/x-shockwave-flash" data="http://static.hotelscombined.com.s3.amazonaws.com/swf/weather_widget.swf" id="w4aaa9c4e6c122b4c4af9ecec7aeeb33a" height="272" width="160">
+                    <param value="http://static.hotelscombined.com.s3.amazonaws.com/swf/weather_widget.swf" name="movie"/>
+                    <param value="transparent" name="wmode">
+                    <param value="station_id=CYYJ&city_name=Victoria&language=en&use_celsius=Yes&skinName=Gray&PID=155469&ts=201307021146&hideChangeSkin=No" name="flashvars">
+                    <param value="all" name="allowNetworking">
+                    <param value="always" name="allowScriptAccess">
+                </object>
+                <a alt="Hotels Combined" title="Hotels Combined" style="margin:0; padding:0; text-decoration: none; background: none;" target="_blank" href="http://widgets.hotelscombined.com/City/Weather/Victoria.htm?use_celsius=Yes">
+                    <div style="background: none; color: white; text-align: center; width: 160px; height: 17px; margin: 0px 0 0 0; padding: 5px 0 0 0; cursor:pointer;background: transparent url(http://static.hotelscombined.com.s3.amazonaws.com/Pages/WeatherWidget/Images/weather_gray_bottom.png) no-repeat; font-size: 12px; font-family: Arial,sans-serif; line-height: 12px; font-weight: bold;">
+                        See 10-Day Forecast
+                    </div>
+                </a>
+                <div style="text-align: center; width: 160px;">
+                    <a alt="Hotels Combined" title="Hotels Combined" style="background:none;font-family:Arial,sans-serif; font-size: 9px; color: #777777;" rel="nofollow" href="http://www.hotelscombined.com">&copy;
+                        HotelsCombined.com
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slider-wrapper theme-default" style="width:650px;float:left;">
+        <div id="slider" class="nivoSlider slider_size">
+            {{ nivoImages() }}
+        </div>
+
+    </div>
+    <div style="float:left;width:160px;margin-left:2px;">
+        <style>
+            ul.social-icons,
+            ul.social-icons li
+            {
+                margin:     0;
+                padding:    0;
+                list-style: none;
+            }
+
+            ul.social-icons
+            { width: 160px; height: auto; }
+
+            ul.social-icons li
+            {
+                float:  left;
+                width:  78px;
+                border: none;
+                height: 78px;
+                margin: 5px 1px;
+            }
+
+            ul.social-icons li img
+            { width: 78px; height: 78px; }
+
+            .clear
+            { clear: both; }
+        </style>
+        <ul class="social-icons">
+            <li>
+                <img src="facebook.png">
+            </li>
+            <li>
+                <img src="twitter.png">
+            </li>
+            <li>
+                <img src="instagram.png">
+            </li>
+            <li>
+                <img src="ebay.png">
+            </li>
+            <li>
+                <img src="youtube.png">
+            </li>
+            <li>
+                <img src="pinterest.png">
+            </li>
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+{{ nivoJs() }}

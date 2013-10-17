@@ -1,0 +1,15 @@
+<div class="with-padding">
+    <form id="edit-slider-form" action="{{ path( 'admin_site_slider_save' , {'id':slider.id}) }}" method="post" {{ form_enctype( form ) }}>
+        <div class="columns align-center large-margin-bottom">
+            <div class="colx2-left">
+                {{ form_row( form.file ) }}
+            </div>
+            <div class="colx2-right">
+                {{ form_row( form.active ) }}
+                {{ form_row( form._token ) }}
+            </div>
+        </div>
+        <div class="clear"></div>
+    </form>
+    {{ form_javascript( form ) }}
+</div>

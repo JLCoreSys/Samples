@@ -1,0 +1,13 @@
+<div class="hours-cell {{ oddoreven }}">
+    <div class="hours-day">
+        {{ title }}
+    </div>
+    <div class="hours-hours">
+        {% if from == 'Gone Riding' or to == 'Gone Riding' or from == 'Closed' or to == 'closed' %}
+            {{ from }}
+        {% else %}
+            {{ from }}
+            <small class="with-padding">to</small>{{ to }}
+        {% endif %}
+    </div>
+</div>

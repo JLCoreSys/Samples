@@ -1,0 +1,30 @@
+<div class="address align-center">
+    <div class="address-title">
+        {{ siteSetting( 'siteName' ) }}
+    </div>
+    <div class="address-address">
+        {% set address1 = siteSetting( 'address1' ) %}
+        {% set address2 = siteSetting( 'address2' ) %}
+        {% if address1 and address2 %}
+            {{ address1 ? address1 : '' }}
+            <br>
+            {{ address2 ? address2 : '' }}
+        {% else %}
+            {{ address1 ? address1 : '' }}
+            {{ address2 ? address2 : '' }}
+        {% endif %}
+        <br>
+        {% set city = siteSetting( 'city' ) %}
+        {{ city ? city ~ ',' : '' }}
+        {% set state = siteSetting( 'state_province' ) %}
+        {{ state ? state ~ '<br>' : '<br>' }}
+        {% set country = siteSetting( 'country' ) %}
+        {{ country ? country ~ ',' : '' }}
+        {% set zip = siteSetting( 'zip_postal' ) %}
+        {{ zip ? zip ~ '<br>' : '<br>' }}
+        {% set phone = siteSetting( 'phone' ) %}
+        Phone: {{ phone ? phone ~ '<br>' : '<br>' }}
+        {% set fax = siteSetting( 'fax' ) %}
+        Fax: {{ fax ? fax ~ '<br>' : '' }}
+    </div>
+</div>

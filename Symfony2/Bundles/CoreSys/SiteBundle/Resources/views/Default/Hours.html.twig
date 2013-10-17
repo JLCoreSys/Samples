@@ -1,0 +1,10 @@
+<div class="hours">
+    {% include 'CoreSysSiteBundle:Default:HoursCell.html.twig' with{ 'oddoreven': 'odd', 'title': 'Mon', 'from': config.hoursMondayFrom, 'to': config.hoursMondayTo } %}
+    {% include 'CoreSysSiteBundle:Default:HoursCell.html.twig' with{ 'oddoreven': 'even', 'title': 'Tues', 'from': config.hoursTuesdayFrom, 'to': config.hoursTuesdayTo } %}
+    {% include 'CoreSysSiteBundle:Default:HoursCell.html.twig' with{ 'oddoreven': 'odd', 'title': 'Wed', 'from': config.hoursWednesdayFrom, 'to': config.hoursWednesdayTo } %}
+    {% include 'CoreSysSiteBundle:Default:HoursCell.html.twig' with{ 'oddoreven': 'even', 'title': 'Thur', 'from': config.hoursThursdayFrom, 'to': config.hoursThursdayTo } %}
+    {% include 'CoreSysSiteBundle:Default:HoursCell.html.twig' with{ 'oddoreven': 'odd', 'title': 'Fri', 'from': config.hoursFridayFrom, 'to': config.hoursFridayTo } %}
+    {% include 'CoreSysSiteBundle:Default:HoursCell.html.twig' with{ 'oddoreven': 'even', 'title': 'Sat', 'from': config.hoursSaturdayFrom, 'to': config.hoursSaturdayTo } %}
+    {% include 'CoreSysSiteBundle:Default:HoursCell.html.twig' with{ 'oddoreven': 'odd', 'title': 'Sun', 'from': config.hoursSundayFrom, 'to': config.hoursSundayTo } %}
+    <div class="clear" style="height:0px;"></div>
+</div>

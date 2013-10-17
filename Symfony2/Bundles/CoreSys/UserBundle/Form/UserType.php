@@ -1,0 +1,63 @@
+<?php
+
+namespace CoreSys\UserBundle\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\Validator\Constraint\UserPassword;
+
+class UserType extends AbstractType
+{
+
+    /**
+     * @var mixed
+     */
+    private $class;
+
+    public function buildForm( FormBuilderInterface $builder, array $options )
+    {
+        $this->buildUserForm( $builder, $options );
+
+        $builder->add( 'package', 'entity', array(
+            'class'    => 'CoreSys\UserBundle\Entity\SubscriptionPackage',
+            'required' => TRUE,
+            'attr'     => array(
+                'data-postdesc' => 'The subscription package to add to this user.'
+            )
+        ) );
+    }
+
+    public function setDefaultOptions( OptionsResolverInterface $resolver )
+    {
+        $resolver->setDefaults( array(
+                                    'intention' => 'create',
+                                ) );
+    }
+
+    public function getName()
+    {
+        return 'coresys_user_type';
+    }
+
+    /**
+     * Builds the embedded form representing the user.
+     *
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
+    protected function buildUserForm( FormBuilderInterface $builder, array $options )
+    {
+        $builder
+        ->add( 'username', NULL, array( 'label' => 'form.username', 'translation_domain' => 'FOSUserBundle', 'attr' => array( 'data-postdesc' => 'The desired username' ) ) )
+        ->add( 'email', 'email', array( 'label' => 'form.email', 'translation_domain' => 'FOSUserBundle', 'attr' => array( 'data-postdesc' => 'The email address for this user.' ) ) )
+        ->add( 'plainPassword', 'repeated', array(
+                'type'            => 'password',
+                'options'         => array( 'translation_domain' => 'FOSUserBundle', 'attr' => array( 'data-postdesc' => 'Password and confirm-password' ) ),
+                'first_options'   => array( 'label' => 'form.password' ),
+                'second_options'  => array( 'label' => 'form.password_confirmation' ),
+                'invalid_message' => 'fos_user.password.mismatch' ) )
+        ->add( 'first_name', NULL, array( 'required' => FALSE, 'attr' => array( 'data-postdesc' => 'The users first name' ) ) )
+        ->add( 'last_name', NULL, array( 'required' => FALSE, 'attr' => array( 'data-postdesc' => 'The users last name' ) ) );
+    }
+}

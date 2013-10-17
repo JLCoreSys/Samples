@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="core_sys_site.converter.listener.class">
+            CoreSys\SiteBundle\EventListener\MultiParamConverterListener
+        </parameter>
+        <parameter key="core_sys_site.converter.doctrine.class">
+            CoreSys\SiteBundle\Request\ParamConverter\MultiParamConverter
+        </parameter>
+        <parameter key="core_sys_site.converter.manager.class">
+            CoreSys\SiteBundle\Request\ParamConverter\MultiParamConverterManager
+        </parameter>
+        <parameter key="core_sys_site.controller.listener.class">CoreSys\SiteBundle\EventListener\ControllerListener
+        </parameter>
+    </parameters>
+
+    <services>
+        <service id="core_sys_site.site_extension"
+                 class="CoreSys\SiteBundle\Twig\SiteExtension">
+            <tag name="twig.extension"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="session"/>
+        </service>
+        <service id="core_sys_site.slider_extension"
+                 class="CoreSys\SiteBundle\Twig\SliderExtension">
+            <tag name="twig.extension"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="session"/>
+        </service>
+        <service id="core_sys_site.base_manager"
+                 class="CoreSys\SiteBundle\Model\BaseManager">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+        </service>
+        <service id="core_sys_site.content_manager"
+                 class="CoreSys\SiteBundle\Model\ContentManager">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <!--<service id="core_sys_site.controller.listener" class="%core_sys_site.controller.listener.class%">-->
+        <!--<argument type="service" id="annotation_reader" />-->
+        <!--<tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="11" />-->
+        <!--</service>-->
+        <!--<service id="core_sys_site.converter.listener" class="%core_sys_site.converter.listener.class%">-->
+        <!--<argument type="service" id="core_sys_site.converter.manager" />-->
+        <!--<tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="10" />-->
+        <!--</service>-->
+        <!--<service id="core_sys_site.converter.manager" class="%core_sys_site.converter.manager.class%">-->
+        <!--</service>-->
+        <!--<service id="core_sys_site.converter.doctrine" class="%core_sys_site.converter.doctrine.class%">-->
+        <!--<argument type="service" id="doctrine" />-->
+        <!--<tag name="request.multi_param_converter" />-->
+        <!--</service>-->
+    </services>
+</container>

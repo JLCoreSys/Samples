@@ -1,0 +1,331 @@
+{% extends "::admin_base.html.twig" %}
+
+{% block head_title %}{{ parent() }}-Site Configuration{% endblock head_title %}
+{% block head_meta_description %}{{ parent() }}{% endblock head_meta_description %}
+{% block head_meta_keywords %}{{ parent() }}{% endblock head_meta_keywords %}
+{% block head_meta_author %}{{ parent() }}{% endblock head_meta_author %}
+
+{% block head_css %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset( 'public/colorpicker/css/colorpicker.css' ) }}"/>
+    <style>
+        #modal
+        { z-index: 1000; }
+
+        .colorpicker
+        { z-index: 100000; }
+
+        table.mceLayout
+        { width: 100% !important; height: 445px !important; }
+
+        .mceIframeContainer iframe
+        { height: 345px !important; }
+    </style>
+{% endblock head_css %}
+
+{% block control_bar %}
+    <div id="control-bar" class="grey-bg clearfix add-bar">
+        <div class="container_12">
+            <div class="float-left">
+                <button type="button" onclick="{{ path( 'admin_index' ) }}">{{ fugue( 'navigation-180' ) | raw }} Back
+                    to Dashboard
+                </button>
+            </div>
+            <div class="float-right">
+                <button id="save-btn" type="button" class="green" onclick="$('#config-form').submit();">{{ fugue( 'tick-circle' ) | raw }}
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock control_bar %}
+
+{% block breadcrumb %}
+    <li>
+        <a href="{{ path( 'admin_site_settings' ) }}" title="Site Configuration">Site Configuration</a>
+    </li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <section class="grid_12">
+    <div class="block-border">
+    <div class="block-content forced-grey-bg">
+    <form class="form no-padding" id="config-form" method="post" action="{{ path( 'admin_site_settings' ) }}" {{ form_enctype( form ) }}>
+    <h1>Site Configuration</h1>
+
+    <div class="block-header no-margin-bottom">Standard Site Configuration Settings</div>
+    <div class="block-controls">
+        <!-- Use the class js-tabs to enable JS tabs script -->
+        <ul class="controls-tabs js-tabs with-children-tip">
+            <li class="current">
+                <a href="#tab-basic" title="Basic Config">{{ webapp( 'Gears' ) }}</a>
+            </li>
+            <li>
+                <a href="#tab-logo" title="Logo/Media">{{ webapp( 'Picture' ) }}</a>
+            </li>
+            <li>
+                <a href="#tab-address" title="Address">{{ webapp( 'Info' ) }}</a>
+            </li>
+            <li>
+                <a href="#tab-legal" title="Legal">{{ webapp( 'Modify' ) }}</a>
+            </li>
+            <li>
+                <a href="#tab-footer" title="Footer Content">{{ webapp( 'Loading' ) }}</a>
+            </li>
+        </ul>
+    </div>
+    <div id="tab-basic" style="margin: -20px 0 !important;">
+        <div class="content-columns">
+            <div class="content-columns-sep"></div>
+            <div class="content-left">
+                <div class="with-padding no-margin-right">
+                    {{ form_label( form.siteName ) }}
+                    {{ form_widget( form.siteName ) }}
+                    {{ form_label( form.siteTitle ) }}
+                    {{ form_widget( form.siteTitle ) }}
+                    {{ form_label( form.siteSlogan ) }}
+                    {{ form_widget( form.siteSlogan ) }}
+                    {{ form_label( form.siteKeywords ) }}
+                    {{ form_widget( form.siteKeywords ) }}
+                    {{ form_label( form.siteAdminEmail ) }}
+                    {{ form_widget( form.siteAdminEmail ) }}
+                    {{ form_label( form.siteWebmasterEmail ) }}
+                    {{ form_widget( form.siteWebmasterEmail ) }}
+                    {{ form_label( form.siteSupportEmail ) }}
+                    {{ form_widget( form.siteSupportEmail ) }}
+                </div>
+            </div>
+            <div class="content-right">
+                <div class="with-padding no-margin-left">
+                    {{ form_label( form.siteDescription ) }}
+                    {{ form_widget( form.siteDescription ) }}
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div id="tab-address" style="margin: -20px 0 !important">
+        <div class="content-columns">
+            <div class="content-columns-sep"></div>
+            <div class="content-left">
+                <div class="with-padding no-margin-right">
+                    {{ form_label( form.address1 ) }}
+                    {{ form_widget( form.address1 ) }}
+                    {{ form_label( form.address2 ) }}
+                    {{ form_widget( form.address2 ) }}
+                    {{ form_label( form.city ) }}
+                    {{ form_widget( form.city ) }}
+                    {{ form_label( form.state_province ) }}
+                    {{ form_widget( form.state_province ) }}
+                    {{ form_label( form.country ) }}
+                    {{ form_widget( form.country ) }}
+                    {{ form_label( form.zip_postal ) }}
+                    {{ form_widget( form.zip_postal ) }}
+                    {{ form_label( form.phone ) }}
+                    {{ form_widget( form.phone ) }}
+                    {{ form_label( form.fax ) }}
+                    {{ form_widget( form.fax ) }}
+                </div>
+            </div>
+            <div class="content-right">
+                <div class="with-padding no-margin-left">
+                    <div class="columns">
+                        <div class="colx2-left">
+
+                            {{ form_label( form.hours_monday_from ) }}
+                            {{ form_widget( form.hours_monday_from ) }}
+                            {{ form_label( form.hours_tuesday_from ) }}
+                            {{ form_widget( form.hours_tuesday_from ) }}
+                            {{ form_label( form.hours_wednesday_from ) }}
+                            {{ form_widget( form.hours_wednesday_from ) }}
+                            {{ form_label( form.hours_thursday_from ) }}
+                            {{ form_widget( form.hours_thursday_from ) }}
+                            {{ form_label( form.hours_friday_from ) }}
+                            {{ form_widget( form.hours_friday_from ) }}
+                            {{ form_label( form.hours_saturday_from ) }}
+                            {{ form_widget( form.hours_saturday_from ) }}
+                            {{ form_label( form.hours_sunday_from ) }}
+                            {{ form_widget( form.hours_sunday_from ) }}
+                        </div>
+                        <div class="colx2-right">
+                            {{ form_label( form.hours_monday_to ) }}
+                            {{ form_widget( form.hours_monday_to ) }}
+                            {{ form_label( form.hours_tuesday_to ) }}
+                            {{ form_widget( form.hours_tuesday_to ) }}
+                            {{ form_label( form.hours_wednesday_to ) }}
+                            {{ form_widget( form.hours_wednesday_to ) }}
+                            {{ form_label( form.hours_thursday_to ) }}
+                            {{ form_widget( form.hours_thursday_to ) }}
+                            {{ form_label( form.hours_friday_to ) }}
+                            {{ form_widget( form.hours_friday_to ) }}
+                            {{ form_label( form.hours_saturday_to ) }}
+                            {{ form_widget( form.hours_saturday_to ) }}
+                            {{ form_label( form.hours_sunday_to ) }}
+                            {{ form_widget( form.hours_sunday_to ) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tab-logo" style="margin: -20px 0 !important">
+        <div class="content-columns">
+            <div class="content-columns-sep"></div>
+            <div class="content-left">
+                <div class="with-padding no-margin-right">
+                    {{ form_label( form.file ) }}
+                    {{ form_widget( form.file ) }}
+                </div>
+            </div>
+            <div class="content-right">
+                <div class="with-padding no-margin-left">
+                    <h1 style="position:relative;left:0">Current Logo</h1>
+                    {% if config.logo %}
+                        <img src="{{ app.request.getSchemeAndHttpHost ~ asset( config.logo.getUrl( 'site', 'original', true ) ) }}"/>
+                    {% else %}
+                        <strong>No logo</strong>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="with-padding no-margin-right">
+            <h2>Images for the site</h2>
+
+            <ul class="grid dark-grey-gradient">
+                {% if config.logo %}
+                    <li>
+                        <div style="height:165px;">
+                            <small style="color:#000;font-weight:bold;">Site Logo</small>
+                            <small style="word-wrap:break-word;">{{ asset( config.logo.getUrl( 'site', 'original', true ) ) }}</small>
+                            <p class="grid-details large-margin-top align-center">
+                                <img src="{{ asset( config.logo.getUrl( 'site', 'original', true ) ) }}" style="max-width:100%;max-height:95px"/>
+                            </p>
+                        </div>
+                    </li>
+                {% endif %}
+                {% set images = config.images %}
+                {% if images and images | length > 0 %}
+                    {% set count = 1 %}
+                    {% for i,image in images %}
+                        <li id="site-image-{{ image.id }}">
+                            <ul class="mini-menu">
+                                <li>
+                                    <a href="javascript:removeSiteImage({{ image.id }})" title="Delete">{{ fugue( 'cross-circle' ) }}
+                                        Delete
+                                    </a>
+                                </li>
+                            </ul>
+                            <div style="height:165px;">
+                                <small style="color:#000;font-weight:bold;">Image {{ count }}</small>
+                                <small style="word-wrap:break-word;text-transform: none;">{{ asset( image.getUrl( 'site', 'original', true ) ) }}</small>
+                                <p class="grid-details large-margin-top align-center">
+                                    <img src="{{ asset( image.getUrl( 'site', 'original', true ) ) }}" style="max-width:100%;max-height:95px"/>
+                                </p>
+                            </div>
+                        </li>
+                        {% set count = count + 1 %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            {{ form_label( form.files ) }}
+            {{ form_widget( form.files ) }}
+        </div>
+    </div>
+    <div id="tab-legal" style="margin: -20px 0 !important;">
+        <div class="content-columns">
+            <div class="content-columns-sep"></div>
+            <div class="content-left">
+                <div class="with-padding no-margin-right">
+                    {{ form_label( form.termsOfUseTitle ) }}
+                    {{ form_widget( form.termsOfUseTitle ) }}
+                    {{ form_label( form.termsOfUse ) }}
+                    {{ form_widget( form.termsOfUse ) }}
+                </div>
+            </div>
+            <div class="content-right">
+                <div class="with-padding no-margin-left">
+                    {{ form_label( form.privacyPolicyTitle ) }}
+                    {{ form_widget( form.privacyPolicyTitle ) }}
+                    {{ form_label( form.privacyPolicy ) }}
+                    {{ form_widget( form.privacyPolicy ) }}
+                    {{ form_label( form._token ) }}
+                    {{ form_widget( form._token ) }}
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div id="tab-footer" style="margin: -20px 0 !important;">
+        <div class="with-padding no-margin-right">
+            {{ form_label( form.footer_content ) }}
+            {{ form_widget( form.footer_content ) }}
+        </div>
+        <ul class="grid dark-grey-gradient">
+            {% if config.logo %}
+                <li>
+                    <div style="height:165px;">
+                        <small style="color:#000;font-weight:bold;">Site Logo</small>
+                        <small style="word-wrap:break-word;">{{ asset( config.logo.getUrl( 'site', 'original', true ) ) }}</small>
+                        <p class="grid-details large-margin-top align-center">
+                            <img src="{{ asset( config.logo.getUrl( 'site', 'original', true ) ) }}" style="max-width:100%;max-height:95px"/>
+                        </p>
+                    </div>
+                </li>
+            {% endif %}
+            {% set images = config.images %}
+            {% if images and images | length > 0 %}
+                {% set count = 1 %}
+                {% for i,image in images %}
+                    <li id="site-image-{{ image.id }}">
+                        <ul class="mini-menu">
+                            <li>
+                                <a href="javascript:removeSiteImage({{ image.id }})" title="Delete">{{ fugue( 'cross-circle' ) }}
+                                    Delete
+                                </a>
+                            </li>
+                        </ul>
+                        <div style="height:165px;">
+                            <small style="color:#000;font-weight:bold;">Image {{ count }}</small>
+                            <small style="word-wrap:break-word;text-transform: none;">{{ asset( image.getUrl( 'site', 'original', true ) ) }}</small>
+                            <p class="grid-details large-margin-top align-center">
+                                <img src="{{ asset( image.getUrl( 'site', 'original', true ) ) }}" style="max-width:100%;max-height:95px"/>
+                            </p>
+                        </div>
+                    </li>
+                    {% set count = count + 1 %}
+                {% endfor %}
+            {% endif %}
+        </ul>
+        <div class="clear"></div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </section>
+{% endblock content %}
+
+{% block body_js %}
+    {{ parent() }}
+    <script src="{{ asset('public/tiny_mce/jquery.tinymce.min.js') }}"></script>
+    <script>
+        function imageUploadStart() {
+            $('#save-btn').attr('disabled', true);
+        }
+        function completeImageUpload() {
+            $('#save-btn').removeAttr('disabled');
+        }
+        function removeSiteImage(id) {
+            $.ajax({
+                url: '{{ path( 'admin_site_settings_ajax_remove_image' ) }}/' + id,
+                success: function (res) {
+                    res = JSON.parse(res);
+                    if (res.success) {
+                        $('#site-image-' + id).remove();
+                    }
+                }
+            });
+        }
+    </script>
+    {{ form_javascript( form ) }}
+{% endblock body_js %}

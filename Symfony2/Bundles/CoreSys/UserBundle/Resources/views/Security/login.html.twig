@@ -1,0 +1,67 @@
+{% extends "CoreSysUserBundle::layout.html.twig" %}
+
+{% block head_css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset( 'developr/css/login.css' ) }}">
+    {% if is_granted( 'ROLE_MEMBER' ) %}
+        <meta http-equiv="REFRESH" content="0;url={{ path( 'site_index' ) }}">
+    {% endif %}
+{% endblock head_css %}
+
+{% block fos_user_content %}
+    {% if error %}
+        <div class="with-padding" style="width:60%;margin:0 auto;">
+            <p class="big-message red-gradient white-color">
+                <a href="#" title="Hide message" class="close">✕</a>
+                        <span class=" black-color">
+                            <span></span>
+                        </span> <span class="big-message-icon icon-cross-round with-text">Error</span>
+                <strong>{{ error|trans({}, 'FOSUserBundle') }}</strong> <br><br>
+            </p>
+        </div>
+    {% endif %}
+
+    <div id="container" style="">
+
+        <hgroup id="login-title" class="large-margin-bottom">
+            <div class="align-center">
+                <img src="{{ asset( 'public/images/login-anim.gif') }}" alt="Login Now"/>
+            </div>
+        </hgroup>
+
+        <form action="{{ path("fos_user_security_check") }}" method="post">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+
+            <ul class="inputs black-input large">
+                <!-- The autocomplete="off" attributes is the only way to prevent webkit browsers from filling the inputs with yellow -->
+                <li><span class="icon-user mid-margin-right"></span><input type="text"
+                                                                           name="_username"
+                                                                           id="username"
+                                                                           value=""
+                                                                           class="input-unstyled"
+                                                                           placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}"
+                                                                           autocomplete="off"></li>
+                <li><span class="icon-lock mid-margin-right"></span><input type="password"
+                                                                           name="_password"
+                                                                           id="pass"
+                                                                           value=""
+                                                                           class="input-unstyled"
+                                                                           placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}"
+                                                                           autocomplete="off"></li>
+            </ul>
+            <div class="align-center black margin-bottom">
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" class="switch tiny"/>
+                <label for="remember_me">
+                    <small>{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</small>
+                </label>
+
+                <a href="javascript:void(0);" class="button gold-gradient glossy icon-question-round">Forgot Password
+                </a>
+            </div>
+
+
+            <button type="submit" class="button gold-gradient glossy full-width huge">Login</button>
+        </form>
+
+    </div>
+{% endblock fos_user_content %}

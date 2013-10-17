@@ -1,0 +1,423 @@
+{% extends "::admin_base.html.twig" %}
+
+{% block head_title %}{{ parent() }}-Site Configuration{% endblock head_title %}
+{% block head_meta_description %}{{ parent() }}{% endblock head_meta_description %}
+{% block head_meta_keywords %}{{ parent() }}{% endblock head_meta_keywords %}
+{% block head_meta_author %}{{ parent() }}{% endblock head_meta_author %}
+
+{% block head_css %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset( 'public/colorpicker/css/colorpicker.css' ) }}"/>
+    <style>
+        #slider_type_file_upload
+        { margin: 0 auto; }
+
+        #sliders-table_info
+        { margin: 0 0 20px 0 !important; }
+    </style>
+{% endblock head_css %}
+
+{% block control_bar %}
+    <div id="control-bar" class="grey-bg clearfix add-bar">
+        <div class="container_12">
+            <div class="float-left">
+                <button type="button" onclick="{{ path( 'admin_index' ) }}">{{ fugue( 'navigation-180' ) | raw }} Back
+                    to Dashboard
+                </button>
+            </div>
+            <div class="float-right">
+                <button id="save-btn" type="button" class="green hidden" onclick="$('#new-form').submit();">{{ fugue( 'tick-circle' ) | raw }}
+                    Save
+                </button>
+                <button id="remove-btn" type="button" class="red hidden" onclick="removeChecked();">{{ fugue( 'cross-circle' ) | raw }}
+                    Remove Checked
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock control_bar %}
+
+{% block breadcrumb %}
+    <li>
+        <a href="{{ path( 'admin_site_sliders' ) }}" title="Site Configuration">Site Sliders</a>
+    </li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <section class="grid_12">
+        <div class="block-border">
+            <div class="block-content forced-grey-bg" style="padding-left:0;padding-right:0">
+                <h1>Site Sliders
+                    <div style="position:absolute;top:1px;left:105%;width:90px;">
+                        <a href="javascript:createNewSlider();" class="button with-tip float-left" title="Create New Slider">{{ fugue( 'plus-circle' ) }}</a>
+                        <a href="javascript:saveSlideOrder();" class="button with-tip float-left margin-left" title="Save Sliders Order">{{ fugue( 'tick-circle' ) }}</a>
+                    </div>
+                </h1>
+                <div class="no-margin no-padding" style="margin-left:0;margin-right:0;padding-left:0;padding-right:0">
+                    {% include 'CoreSysSiteBundle:Admin:slidersTable.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+{% block body_js %}
+    {{ parent() }}
+    <script src="{{ asset('public/tiny_mce/jquery.tinymce.min.js') }}"></script>
+    <script>
+        function imageUploadStart() {
+            $('#save-btn').attr('disabled', true);
+            $('.block-footer button').eq(0).addClass('disabled');
+        }
+        function completeImageUpload() {
+            $('#save-btn').removeAttr('disabled');
+            $('.block-footer button').eq(0).removeClass('disabled');
+        }
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var table = $('#sliders-table');
+        oTable = table.dataTable({
+            /*
+             * We set specific options for each columns here. Some columns contain raw data to enable correct sorting, so we convert it for display
+             * @url http://www.datatables.net/usage/columns
+             */
+            aoColumns: [
+                { bSortable: false },	// No sorting for this columns, as it only contains checkboxes
+                { sType: 'string' },
+                { bSortable: false },
+                { sType: 'string' },
+                { sType: 'string' },
+                { bSortable: false }	// No sorting for actions column
+            ],
+            "sPaginationType": "full_numbers",
+            "iDisplayLength": 100,
+
+            /*
+             * Set DOM structure for table controls
+             * @url http://www.datatables.net/examples/basic_init/dom.html
+             */
+            sDom: '<"block-controls"<"controls-buttons"p>>rti<"block-footer clearfix"lf>',
+
+            fnInitComplete: function () {
+                this.parent().applyTemplateSetup();
+            }
+        });
+
+        table.addClass("enhanced");
+
+        // Sorting arrows behaviour
+        table.find('thead .sort-up').click(function (event) {
+            // Stop link behaviour
+            event.preventDefault();
+
+            // Find column index
+            var column = $(this).closest('th'),
+                    columnIndex = column.parent().children().index(column.get(0));
+
+            // Send command
+            oTable.fnSort([
+                [columnIndex, 'asc']
+            ]);
+
+            // Prevent bubbling
+            return false;
+        });
+        table.find('thead .sort-down').click(function (event) {
+            // Stop link behaviour
+            event.preventDefault();
+
+            // Find column index
+            var column = $(this).closest('th'),
+                    columnIndex = column.parent().children().index(column.get(0));
+
+            // Send command
+            oTable.fnSort([
+                [columnIndex, 'desc']
+            ]);
+
+            // Prevent bubbling
+            return false;
+        });
+
+        $('.check-all').click(function () {
+            var total = 0;
+            var checked = 0;
+            var check = true;
+            $("#sliders-table tbody .table-check-cell>input[type='checkbox']").each(function () {
+                if ($(this).is(':checked')) {
+                    checked++;
+                }
+                total++;
+            });
+            if (checked == total) {
+                check = false;
+                $('.remove-checked').attr('disabled', 'disabled');
+            } else {
+                $('.remove-checked').removeAttr('disabled');
+            }
+            $("#sliders-table tbody .table-check-cell>input[type='checkbox']").each(function () {
+                if (check) {
+                    $(this).attr('checked', 'checked');
+                } else {
+                    $(this).removeAttr('checked');
+                }
+                verifyCheckboxes();
+            });
+        });
+
+        $('#sliders-table tbody').sortable(
+                {
+                    helper: 'clone',
+                    forceHelperSize: true,
+                    stop: function () {
+                        var cls = 'odd';
+                        $('#sliders-table tbody tr').each(function () {
+                            if (cls == 'odd') {
+                                $(this).removeClass('even');
+                                $(this).addClass(cls);
+                                cls = 'even';
+                            } else {
+                                $(this).removeClass('odd');
+                                $(this).addClass(cls);
+                                cls = 'odd';
+                            }
+                        });
+                    }
+                }
+        );
+
+        setTimeout(function () {
+            $('#sliders-table thead th').eq(0).width('20px');
+            $('#sliders-table thead th').eq(1).width('30px');
+            $('#sliders-table thead th').eq(2).width('auto');
+            $('#sliders-table thead th').eq(3).width('75px');
+            $('#sliders-table thead th').eq(4).width('60px');
+            $('#sliders-table thead th').eq(5).width('100px');
+
+            $('#sliders-table').find('thead th').each(function (i) {
+                var th = $(this), id = th.attr('id'), classes = th.attr('class');
+                if (!id) {
+                    id = 'col-' + i;
+                    th.attr('id', id);
+                }
+                $('#sliders-table').find('tbody tr').each(function () {
+                    var cell = $(this).find('th,td').eq(i);
+                    cell.attr('heaaders', id);
+                    if (classes) {
+                        cell.addClass(classes);
+                        cell.removeClass('black-cell');
+                    }
+                });
+            });
+
+            $('#sliders-table tbody tr').each(function () {
+                var sid = $(this).attr('data-sid');
+
+                // Add a context menu to the target element
+                $(this).bind('contextMenu', function (event, list) {
+                    list.push({ text: 'Create New Slider', link: 'javascript:createNewSlider()', icon: 'plus'});
+
+                    // Separator
+                    list.push(false);
+                    list.push({ text: 'Preview', link: 'javascript:previewSlider(' + sid + ')', icon: 'magnifier' });
+
+                    // Separator
+                    list.push(false);
+                    list.push({ text: 'Edit', link: 'javascript:editSlider(' + sid + ')', icon: 'edit' });
+                    list.push({ text: 'Delete', class: "confirm", link: 'javascript:removeSingle(' + sid + ')', icon: 'delete' });
+                });
+            });
+
+            $('#sliders-table tbody tr').find('input[type="checkbox"]').click(function () {
+                verifyCheckboxes();
+            });
+        }, 500);
+    });
+
+    function verifyCheckboxes() {
+        var checked = 0;
+        $('#sliders-table tbody tr').find('input[type="checkbox"]').each(function () {
+            if ($(this).is(':checked')) {
+                checked++;
+            }
+        });
+
+        if (checked > 0) {
+            $('#remove-btn').removeClass('hidden');
+        } else {
+            $('#remove-btn').addClass('hidden');
+        }
+    }
+
+    function editSlider(sid) {
+        $.modal({
+            title: 'Edit Slider',
+            maxWidth: 800,
+            minWidth: 450,
+            width: 500,
+            url: '{{ path( 'admin_site_ajax_edit_slider_form' ) }}/' + sid,
+            closeButton: false,
+            resizeOnLoad: true,
+            buttons: {
+                'Save': function (win) {
+                    $('#edit-slider-form').submit();
+                },
+                'Close': function (win) {
+                    win.closeModal();
+                }
+            },
+            complete: function (res) {
+                setTimeout(function () {
+                    $.modal.current.centerModal(true);
+                }, 500);
+            }
+        });
+    }
+
+    function previewSlider(sid) {
+        $.modal({
+            title: 'Preview Slider',
+            maxWidth: 800,
+            minWidth: 450,
+            width: 500,
+            url: '{{ path( 'admin_site_ajax_preview_slider' ) }}/' + sid,
+            closeButton: false,
+            resizeOnLoad: true,
+            buttons: {
+                'Close': function (win) {
+                    win.closeModal();
+                }
+            },
+            complete: function (res) {
+                setTimeout(function () {
+                    $.modal.current.centerModal(true);
+                }, 500);
+            }
+        });
+    }
+
+    function createNewSlider() {
+        $.modal({
+            title: 'Create New Slider',
+            maxWidth: 800,
+            minWidth: 450,
+            width: 500,
+            url: '{{ path( 'admin_site_ajax_new_slider_form' ) }}',
+            closeButton: false,
+            resizeOnLoad: true,
+            buttons: {
+                'Create': function (win) {
+                    $('#new-slider-form').submit();
+                },
+                'Close': function (win) {
+                    win.closeModal();
+                }
+            },
+            complete: function (res) {
+                setTimeout(function () {
+                    $.modal.current.centerModal(true);
+                }, 500);
+            }
+        });
+    }
+
+    function saveSlideOrder() {
+        var order = new Array();
+        $('#sliders-table tbody tr').each(function () {
+            var sid = $(this).attr('data-sid');
+            order.push(sid);
+        });
+
+        $.ajax({
+            url: '{{ path( 'admin_site_ajax_save_slider_order' ) }}',
+            type: 'post',
+            data: { 'order': order },
+            success: function (res) {
+                res = JSON.parse(res);
+                if (res.success) {
+                    var order = res.order;
+                    var index = 0;
+                    $('#sliders-table tbody tr').each(function () {
+                        $(this).find('td').eq(3).html('' + index + '');
+                        index++;
+                    });
+                }
+            }
+        });
+    }
+
+    function removeSingle(sid) {
+        var sids = new Array();
+        sids.push(sid);
+
+        $.modal({
+            content: '<p class="warning">Are you sure you want to remove this slider?</p>',
+            title: 'Confirm Slide Removal',
+            maxWidth: 500,
+            closeButton: false,
+            buttons: {
+                'Confirm': function (win) {
+                    confirmedRemoveChecked(sids);
+                    win.closeModal();
+                },
+                'Close': function (win) {
+                    win.closeModal();
+                }
+            }
+        });
+    }
+
+    function removeChecked() {
+        var sids = new Array();
+        $('#sliders-table tbody tr').each(function () {
+            var el = $(this).find('input[type="checkbox"]');
+            if (el.is(':checked')) {
+                sids.push(el.val());
+            }
+        });
+
+        $.modal({
+            content: '<p class="warning">Are you sure you want to remove these slides?</p>',
+            title: 'Confirm Slides Removal',
+            maxWidth: 500,
+            closeButton: false,
+            buttons: {
+                'Confirm': function (win) {
+                    confirmedRemoveChecked(sids);
+                    win.closeModal();
+                },
+                'Close': function (win) {
+                    win.closeModal();
+                }
+            }
+        });
+    }
+
+    function confirmedRemoveChecked(sids) {
+        $.ajax({
+            url: '{{ path( 'admin_site_ajax_remove_checked_sliders' ) }}',
+            type: 'post',
+            data: { 'sids': sids },
+            success: function (res) {
+                res = JSON.parse(res);
+                if (res.success) {
+                    var sids = res.sids;
+                    jQuery.each(sids, function (i, sid) {
+                        var el = $('#slider-row-' + sid);
+                        el.remove();
+                    });
+
+                    var index = 0;
+                    $('#sliders-table tbody tr').each(function () {
+                        $(this).find('td').eq(3).html('' + index + '');
+                        index++;
+                    });
+                }
+            }
+        });
+
+        verifyCheckboxes();
+    }
+    </script>
+{% endblock body_js %}
