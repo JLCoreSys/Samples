@@ -35,3 +35,5 @@ Entity\*
 
 EventListener\*
 
+The bundle is still under development. Currently in the process of adding in hooks to add blocks of twig into specified templates.
+
