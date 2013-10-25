@@ -1,0 +1,101 @@
+{% extends 'CoreSysAdminBundle:Admin:admin_base.html.twig' %}
+
+{% block head_css %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset( 'bundles/coresysadmin/plugins/contextMenu/jquery.contextMenu.css') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset( 'bundles/coresysadmin/css/plugins/daterangepicker.css') }}" />
+{% endblock head_css %}
+
+{% block head_js %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset( 'bundles/coresysadmin/js/jquery.form.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset( 'bundles/coresysadmin/plugins/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset( 'bundles/coresysadmin/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <script type="text/javascript">
+        var user_roles = {{ userRolePairs( true, 'id', 'text' ) | raw }};
+    </script>
+{% endblock head_js %}
+
+{% block content_page_title %}
+    <h3>Site Users</h3>
+{% endblock content_page_title %}
+
+{% block content_breadcrumb_items %}
+    {{ parent() }}
+    <li class="current">
+        <a href="{{ path( 'admin_users_index' ) }}" title=""><i class="icon-user"></i> User Management</a>
+    </li>
+{% endblock content_breadcrumb_items %}
+
+{% block content_page_stats_items %}
+    {{ parent() }}
+    <li>
+        <div class="summary">
+            <span>Total Users</span>
+            <h3>{{ numberFormat( userCount( ) ) }}</h3>
+        </div>
+        <div id="sparkline-bar" class="graph sparkline hidden-xs">{{ userLastYearCounts() }}</div>
+        {#<div id="sparkline-bar" class="graph sparkline hidden-xs">2,0,20,100,5,1,5,10,60,10,30,40</div>#}
+    </li>
+    <li>
+        <a href="javascript:addNewUser()" class="btn small-margin-top"><i class="icon-plus"></i> Add New User</a>
+    </li>
+    <li class="remove-selected" style="display:none">
+        <button class="btn btn-danger small-margin-top"><i class="icon-remove"></i> Remove Selected</button>
+    </li>
+{% endblock content_page_stats_items %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <table id="users-table" class="table table-responsive table-striped table-bordered table-hover table-checkable table-tabletools datatable" data-dataTable='{
+                "iDisplayLength": 50,
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "{{ path( 'admin_ajax_users_data_tables' ) }}",
+                "fnDrawCallback": "userTableDraw",
+                "aaSorting": [[4, "desc"]]
+            }'>
+                <thead>
+                <tr>
+                    <th class="checkbox-column" data-hide="phone">
+                        <input type="checkbox" class="uniform">
+                    </th>
+                    <th data-hide="phone,tablet">ID</th>
+                    <th>Login</th>
+                    <th data-hide="phone">Email</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th width="150">Options</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+
+            <br><br>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="userModalAdd" tabindex="-1" role="dialog" aria-labelledby="userModalAdd" aria-hidden="true"></div>
+    <div class="modal fade" id="userModalEdit" tabindex="-1" role="dialog" aria-labelledby="userModalEdit" aria-hidden="true"></div>
+{% endblock content %}
+
+{% block body_js %}
+    {{ parent() }}
+    <script>
+        var ajax_url_add_user = '{{ path('admin_ajax_users_new') }}';
+        var ajax_url_edit_user = '{{ path('admin_ajax_users_edit') }}';
+        var ajax_url_view_user = '{{ path('admin_users_user') }}';
+        var ajax_url_remove_user = '{{ path('admin_ajax_users_remove_user') }}';
+        var ajax_url_remove_selected_users = '{{ path('admin_ajax_users_remove_selected') }}';
+        $(document).ready(function(){
+
+        });
+    </script>
+    <script type="application/javascript" src="{{ asset( 'bundles/coresysuser/js/admin.js') }}"></script>
+{% endblock body_js %}

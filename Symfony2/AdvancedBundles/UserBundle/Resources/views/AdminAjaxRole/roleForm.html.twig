@@ -1,0 +1,66 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{{ title }}</h4>
+        </div>
+        <div class="modal-body">
+            <form id="{{ new ? 'new-role-form' : 'edit-role-form' }}" class="role-form" action="{{ action }}" method="post" {{ form_enctype( form ) }}>
+                <div class="row">
+                    <div class="col-md-8">{{ form_row( form.name ) }}</div>
+                    <div class="col-md-4">{{ form_row( form.color ) }}</div>
+                </div>
+
+                {{ form_row( form.parents ) }}
+                <br>
+                {{ form_row( form.switch ) }}
+
+                {{ form_row( form._token ) }}
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default close-role-form" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" onclick="$('#{{ new ? 'new-role-form' : 'edit-role-form' }}').submit();">Save</button>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+<script type="application/javascript">
+    $(document).ready(function(){
+        dataPostDesc();
+        $('#{{ new ? 'new-role-form' : 'edit-role-form' }}').ajaxForm({
+            success: function(res, status) {
+                if(typeof roleSavedCallback == 'function') {
+                    roleSavedCallback(res,status,{{ new ? 'true' : 'false' }});
+                }
+            }
+        });
+        $('[rel="color-picker"]').each(function(){
+            var $wrapper = $('<div class="input-group"></div>');
+            $(this).parent().prepend( $wrapper );
+            var $addon = $('<span class="input-group-addon"><i class="icon-hand-down"></i></span>');
+            $addon.css('background',$(this).val());
+            $addon.click(function(){$wrapper.find('input').click();});
+            $wrapper.append($addon);
+            $(this).detach();
+            $wrapper.prepend( $(this) );
+
+            var $this = $(this);
+
+            $(this).colpick({
+                layout:'hex',
+                submit:0,
+                onChange:function(hsb,hex,rgb,fromSetColor) {
+                    fromSetColor = fromSetColor | 000000;
+                    if(!fromSetColor) {
+                        $this.attr('value','#' + hex);
+                        $this.parent().find('.input-group-addon').css('background','#'+hex);
+                    }
+                }
+            });
+            $(this).keyup(function(){
+                $(this).colpickSetColor(this.value);
+            });
+        });
+    });
+</script>
+{{ form_javascript( form ) }}

@@ -1,0 +1,52 @@
+{% extends 'CoreSysAdminBundle:Admin:admin_base.html.twig' %}
+
+{% block head_css %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset( 'bundles/coresysadmin/plugins/contextMenu/jquery.contextMenu.css') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset( 'bundles/coresysadmin/css/plugins/daterangepicker.css') }}" />
+{% endblock head_css %}
+
+{% block head_js %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset( 'bundles/coresysadmin/js/jquery.form.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset( 'bundles/coresysadmin/plugins/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset( 'bundles/coresysadmin/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <script type="text/javascript">
+        var user_roles = {{ userRolePairs( true, 'id', 'text' ) | raw }};
+    </script>
+{% endblock head_js %}
+
+{% block content_page_title %}
+    <h3>User: {{ user ? user.username : 'Could not find user' }}</h3>
+{% endblock content_page_title %}
+
+{% block content_breadcrumb_items %}
+    {{ parent() }}
+    <li>
+        <a href="{{ path( 'admin_users_index' ) }}" title=""><i class="icon-groups"></i> User Management</a>
+    </li>
+    <li class="current">
+        <a href="javascript:void(0)" title=""><i class="icon-user"></i> {{ user ? user.username : 'Could not find user' }}</a>
+    </li>
+{% endblock content_breadcrumb_items %}
+
+{% block content_page_stats_items %}
+    {{ parent() }}
+    {% if view_hook %}{% for i,hook in view_hook %}{{ hook | raw }}{% endfor %}{% endif %}
+{% endblock content_page_stats_items %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'CoreSysUserBundle:Admin:userInfo.html.twig' %}
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="userModalEdit" tabindex="-1" role="dialog" aria-labelledby="userModalEdit" aria-hidden="true"></div>
+{% endblock content %}
+
+{% block body_js %}
+    {{ parent() }}
+{% endblock body_js %}

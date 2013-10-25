@@ -1,0 +1,93 @@
+{% extends 'CoreSysAdminBundle:Admin:admin_base.html.twig' %}
+
+{% block head_css %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset( 'bundles/coresysadmin/plugins/colorPickMaster/css/colpick.css' ) }}" />
+{% endblock head_css %}
+
+{% block head_js %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset( 'bundles/coresysadmin/js/jquery.form.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset( 'bundles/coresysadmin/plugins/colorPickMaster/js/colpick.js' ) }}"></script>
+{% endblock head_js %}
+
+{% block content_page_title %}
+    <h3>Roles Management</h3>
+{% endblock content_page_title %}
+
+{% block content_breadcrumb_items %}
+    {{ parent() }}
+    <li>
+        <a href="{{ path( 'admin_users_index' ) }}" title=""><i class="icon-user"></i> User Management</a>
+    </li>
+    <li class="current">
+        <a href="{{ path( 'admin_users_index' ) }}" title=""><i class="icon-user"></i> Users Roles Management</a>
+    </li>
+{% endblock content_breadcrumb_items %}
+
+{% block content_page_stats_items %}
+    {{ parent() }}
+    <li>
+        <a href="javascript:addNewRole()" class="btn small-margin-top"><i class="icon-plus"></i> Add New Role</a>
+    </li>
+    <li class="remove-selected">
+        <button class="btn btn-danger small-margin-top "><i class="icon-remove"></i> Remove Selected</button>
+    </li>
+{% endblock content_page_stats_items %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <table id="roles-table" class="table table-responsive table-striped table-bordered table-hover table-checkable table-tabletools datatable" data-dataTable='{
+                "iDisplayLength": 50,
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "{{ path( 'admin_ajax_users_roles_data_tables' ) }}",
+                "aaSorting": [[1, "asc"]],
+                "aoColumnDefs": [
+                  {
+                     "bSortable": false,
+                     "aTargets": [ 0, 3, 4, 7 ]
+                  }
+                ]
+            }'>
+                <thead>
+                <tr>
+                    <th class="checkbox-column" data-hide="phone">
+                        <input type="checkbox" class="uniform">
+                    </th>
+                    <th data-hide="phone,tablet">ID</th>
+                    <th>Name</th>
+                    <th data-hide="phone">ROLE</th>
+                    <th data-hide="phone,tablet">Parent</th>
+                    <th data-hide="phone,tablet">Users</th>
+                    <th width="75" data-hide="phone">Switch</th>
+                    <th width="75" data-hide="phone">Status</th>
+                    <th width="150">Options</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+
+            <br><br>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="roleModalAdd" tabindex="-1" role="dialog" aria-labelledby="roleModalAdd" aria-hidden="true"></div>
+    <div class="modal fade" id="roleModalEdit" tabindex="-1" role="dialog" aria-labelledby="roleModalEdit" aria-hidden="true"></div>
+{% endblock content %}
+
+{% block body_js %}
+    {{ parent() }}
+    <script>
+        var ajax_url_add_role = '{{ path('admin_ajax_users_roles_new') }}';
+        var ajax_url_edit_role = '{{ path('admin_ajax_users_roles_edit') }}';
+        var ajax_url_remove_role = '{{ path('admin_ajax_users_role_remove') }}';
+        var ajax_url_remove_roles = '{{ path('admin_ajax_users_roles_remove') }}';
+        $(document).ready(function(){});
+    </script>
+    <script type="application/javascript" src="{{ asset( 'bundles/coresysuser/js/admin_roles.js') }}"></script>
+{% endblock body_js %}

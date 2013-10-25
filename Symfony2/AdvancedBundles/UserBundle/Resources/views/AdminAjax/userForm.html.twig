@@ -1,0 +1,29 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{{ title }}</h4>
+        </div>
+        <div class="modal-body">
+            <form id="{{ new ? 'new-user-form' : 'edit-user-form' }}" class="user-form" action="{{ action }}" method="post" {{ form_enctype( form ) }}>
+                {{ form_widget( form ) }}
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default close-user-form" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" onclick="$('#{{ new ? 'new-user-form' : 'edit-user-form' }}').submit();">Save</button>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+<script type="application/javascript">
+    $(document).ready(function(){
+        dataPostDesc();
+        $('#{{ new ? 'new-user-form' : 'edit-user-form' }}').ajaxForm({
+            success: function(res, status) {
+                if(typeof userSavedCallback == 'function') {
+                    userSavedCallback(res,status,{{ new ? 'true' : 'false' }});
+                }
+            }
+        });
+    });
+</script>

@@ -1,0 +1,40 @@
+{% extends 'CoreSysAdminBundle:Admin:admin_base.html.twig' %}
+
+{% block head_css %}
+    {{ parent() }}
+{% endblock head_css %}
+
+{% block head_js %}
+    {{ parent() }}
+{% endblock head_js %}
+
+{% block content_page_title %}
+    <h3>User: Could not find user</h3>
+{% endblock content_page_title %}
+
+{% block content_breadcrumb_items %}
+    {{ parent() }}
+    <li>
+        <a href="{{ path( 'admin_users_index' ) }}" title=""><i class="icon-groups"></i> User Management</a>
+    </li>
+    <li class="current">
+        <a href="javascript:void(0)" title=""><i class="icon-user"></i> Could not find user</a>
+    </li>
+{% endblock content_breadcrumb_items %}
+
+{% block content_page_stats_items %}
+    {{ parent() }}
+{% endblock content_page_stats_items %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center">
+                <h1>Could not find user</h1>
+                <a class="btn btn-primary" href="javascript:window.history.back();">Go Back</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

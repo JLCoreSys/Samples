@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="core_sys_user.user_extensions"
+                 class="CoreSys\UserBundle\Twig\UserExtension">
+            <tag name="twig.extension"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="session"/>
+        </service>
+        <service id="core_sys_user.user_manager"
+                 class="CoreSys\UserBundle\Model\UserManager">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="core_sys_user.role_extensions"
+                 class="CoreSys\UserBundle\Twig\RoleExtension">
+            <tag name="twig.extension"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="session"/>
+        </service>
+        <service id="core_sys_user.role_manager"
+                 class="CoreSys\UserBundle\Model\RolesManager">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+        </service>
+        <service id="core_sys_user.access_manager"
+                 class="CoreSys\UserBundle\Model\AccessManager">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <!-- LISTENERS -->
+        <service id="core_sys_user.listener.users" class="CoreSys\UserBundle\EventListener\AdminUserListener">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="router" />
+        </service>
+        <service id="core_sys_user.listener.roles" class="CoreSys\UserBundle\EventListener\AdminRoleListener">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="router" />
+            <argument type="service" id="service_container"/>
+        </service>
+        <service id="core_sys_user.listener.access" class="CoreSys\UserBundle\EventListener\AdminAccessListener">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="router" />
+            <argument type="service" id="service_container"/>
+        </service>
+    </services>
+</container>
